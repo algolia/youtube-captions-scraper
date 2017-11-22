@@ -46,10 +46,12 @@ export async function getSubtitles({
       const [, start] = startRegex.exec(line);
       const [, dur] = durRegex.exec(line);
 
+      const fontTag = new RegExp('<'+'font'+'[^><]*>|<.'+'font'+'[^><]*>','g');
       const htmlText = line
         .replace(/<text.+>/, '')
         .replace(/&amp;/gi, '&')
-        .replace(/<\/?[^>]+(>|$)/g, '');
+        .replace(/<\/?[^>]+(>|$)/g, '')
+        .replace(fontTag, '');
 
       const text = he.decode(htmlText);
 
