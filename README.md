@@ -1,17 +1,17 @@
-# Youtube Captions Scrapper
+# Youtube Captions scraper
 
 > Scrap youtube user defined and auto-generated captions
 
 ## Installation
 
-* `> npm install -S youtube-captions-scrapper` OR
-* `> yarn add youtube-captions-scrapper`
+* `> npm install -S youtube-captions-scraper` OR
+* `> yarn add youtube-captions-scraper`
 
 ## Usage
 
 ```js
 // ES6 / TypeScript
-import { getSubtitles } from 'youtube-captions-scrapper';
+import { getSubtitles } from 'youtube-captions-scraper';
 
 getSubtitles({
   videoID: 'XXXXX', // youtube video id
@@ -21,7 +21,7 @@ getSubtitles({
 });
 
 // ES5
-var getSubtitles = require('youtube-captions-scrapper').getSubtitles;
+var getSubtitles = require('youtube-captions-scraper').getSubtitles;
 
 getSubtitles({
   videoID: 'XXXXX', // youtube video id
