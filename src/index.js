@@ -3,6 +3,7 @@
 import he from 'he';
 import axios from 'axios';
 import { find } from 'lodash';
+import striptags from 'striptags';
 
 export async function getSubtitles({
   videoID,
@@ -51,7 +52,9 @@ export async function getSubtitles({
         .replace(/&amp;/gi, '&')
         .replace(/<\/?[^>]+(>|$)/g, '');
 
-      const text = he.decode(htmlText);
+      const strippedText = striptags(htmlText);
+
+      const text = he.decode(strippedText);
 
       return { start, dur, text };
     });
