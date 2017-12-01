@@ -3,7 +3,7 @@
 import he from 'he';
 import axios from 'axios';
 import { find } from 'lodash';
-import striptags from 'striptags';
+// import striptags from 'striptags';
 
 export async function getSubtitles({
   videoID,
@@ -44,17 +44,19 @@ export async function getSubtitles({
       const startRegex = /start="([\d.]+)"/;
       const durRegex = /dur="([\d.]+)"/;
 
+      const fontTag = new RegExp('<'+'font'+'[^><]*>|<.'+'font'+'[^><]*>','g');
       const [, start] = startRegex.exec(line);
       const [, dur] = durRegex.exec(line);
 
       const htmlText = line
         .replace(/<text.+>/, '')
         .replace(/&amp;/gi, '&')
-        .replace(/<\/?[^>]+(>|$)/g, '');
+        .replace(/<\/?[^>]+(>|$)/g, '')
+        .replace(fontTag, '');
 
-      const strippedText = striptags(htmlText);
+      // const strippedText = striptags(htmlText);
 
-      const text = he.decode(strippedText);
+      const text = he.decode(htmlText);
 
       return { start, dur, text };
     });
