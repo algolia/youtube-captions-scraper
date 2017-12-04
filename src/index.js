@@ -2,23 +2,19 @@
 
 import he from 'he';
 import axios from 'axios';
-import {
-  find
-} from 'lodash';
+import { find } from 'lodash';
 import striptags from 'striptags';
 
 export async function getSubtitles({
   videoID,
   lang = 'en',
 }: {
-    videoID: string,
-    lang: 'en',
-  }) {
-  const {
-    data
-  } = await axios.get(
-      `https://youtube.com/get_video_info?video_id=${videoID}`
-    );
+  videoID: string,
+  lang: 'en',
+}) {
+  const { data } = await axios.get(
+    `https://youtube.com/get_video_info?video_id=${videoID}`
+  );
 
   const decodedData = decodeURIComponent(data);
 
@@ -28,25 +24,21 @@ export async function getSubtitles({
 
   const regex = /({"captionTracks":.*isTranslatable":(true|false)}])/;
   const [match] = regex.exec(decodedData);
-  const {
-    captionTracks
-  } = JSON.parse(`${match}}`);
+  const { captionTracks } = JSON.parse(`${match}}`);
 
   const subtitle =
     find(captionTracks, {
-      vssId: `.${lang}`
+      vssId: `.${lang}`,
     }) ||
     find(captionTracks, {
-      vssId: `a.${lang}`
+      vssId: `a.${lang}`,
     });
 
   // * ensure we have found the correct subtitle lang
   if (!subtitle || (subtitle && !subtitle.baseUrl))
     throw new Error(`Could not find ${lang} captions for ${videoID}`);
 
-  const {
-    data: transcript
-  } = await axios.get(subtitle.baseUrl);
+  const { data: transcript } = await axios.get(subtitle.baseUrl);
   const lines = transcript
     .replace('<?xml version="1.0" encoding="utf-8" ?><transcript>', '')
     .replace('</transcript>', '')
@@ -70,7 +62,7 @@ export async function getSubtitles({
       return {
         start,
         dur,
-        text
+        text,
       };
     });
 
