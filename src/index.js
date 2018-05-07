@@ -10,7 +10,7 @@ export async function getSubtitles({
   lang = 'en',
 }: {
   videoID: string,
-  lang: 'en',
+  lang: 'en' | 'de' | 'fr' | void,
 }) {
   const { data } = await axios.get(
     `https://youtube.com/get_video_info?video_id=${videoID}`
@@ -32,7 +32,8 @@ export async function getSubtitles({
     }) ||
     find(captionTracks, {
       vssId: `a.${lang}`,
-    });
+    }) ||
+    find(captionTracks, ({ vssId }) => vssId && vssId.match(`.${lang}`));
 
   // * ensure we have found the correct subtitle lang
   if (!subtitle || (subtitle && !subtitle.baseUrl))

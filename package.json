@@ -20,7 +20,8 @@
     "build": "rm -rf dist && babel src -d dist",
     "prepublish": "npm run build",
     "lint": "eslint src",
-    "test": "ava"
+    "test": "ava",
+    "flow": "flow"
   },
   "devDependencies": {
     "ava": "^0.25.0",
