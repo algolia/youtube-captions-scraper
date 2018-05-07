@@ -9,3 +9,8 @@ test('Extract estonia war subtitles', async t => {
     text: 'November 19',
   });
 });
+
+test('Extract passive income video', async t => {
+  const subtitles = await getSubtitles({ videoID: 'JueUvj6X3DA' });
+  t.deepEqual(subtitles[0].text, '- Creating passive income takes work,');
+});

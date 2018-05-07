@@ -32,10 +32,7 @@ export async function getSubtitles({
     }) ||
     find(captionTracks, {
       vssId: `a.${lang}`,
-    }) ||
-    find(captionTracks, ({ vssId }) =>
-      vssId && vssId.match(`.${lang}`)
-    );
+    });
 
   // * ensure we have found the correct subtitle lang
   if (!subtitle || (subtitle && !subtitle.baseUrl))
