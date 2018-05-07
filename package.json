@@ -19,9 +19,11 @@
   "scripts": {
     "build": "rm -rf dist && babel src -d dist",
     "prepublish": "npm run build",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "test": "ava"
   },
   "devDependencies": {
+    "ava": "^0.25.0",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.0.2",
     "babel-preset-env": "^1.6.1",
@@ -43,5 +45,11 @@
     "he": "^1.1.1",
     "lodash": "^4.17.4",
     "striptags": "^3.1.0"
+  },
+  "ava": {
+    "babel": "inherit",
+    "require": [
+      "babel-register"
+    ]
   }
 }
