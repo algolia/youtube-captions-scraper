@@ -1,9 +1,8 @@
 /* @flow */
 
 import he from 'he';
-import axios from 'axios';
+import axios from 'axios';  // includes JSON transforms & XSRF protection
 import { find } from 'lodash';
-import striptags from 'striptags';
 
 export async function getSubtitles({
   videoID,
@@ -40,25 +39,24 @@ export async function getSubtitles({
     throw new Error(`Could not find ${lang} captions for ${videoID}`);
 
   const { data: transcript } = await axios.get(subtitle.baseUrl);
+
   const lines = transcript
     .replace('<?xml version="1.0" encoding="utf-8" ?><transcript>', '')
+    .replace(/&lt;font color=&quot;#......&quot;&gt;/gi, '')
+    .replace(/&lt;\/font&gt;/gi, '')
+    .replace(/&amp;/gi, '&')
     .replace('</transcript>', '')
     .split('</text>')
     .filter(line => line && line.trim())
     .map(line => {
       const startRegex = /start="([\d.]+)"/;
       const durRegex = /dur="([\d.]+)"/;
-
       const [, start] = startRegex.exec(line);
       const [, dur] = durRegex.exec(line);
-
+  
       const htmlText = line
-        .replace(/<text.+>/, '')
-        .replace(/&amp;/gi, '&')
-        .replace(/<\/?[^>]+(>|$)/g, '');
-
-      const decodedText = he.decode(htmlText);
-      const text = striptags(decodedText);
+        .replace(/<text.+>/, '');
+      const text = he.decode(htmlText);
 
       return {
         start,
