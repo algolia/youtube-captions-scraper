@@ -45,7 +45,8 @@
     "axios": "^0.17.1",
     "he": "^1.1.1",
     "lodash": "^4.17.4",
-    "striptags": "^3.1.0"
+    "striptags": "^3.1.0",
+    "xml2json": "^0.11.2"
   },
   "ava": {
     "babel": "inherit",

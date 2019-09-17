@@ -14,3 +14,13 @@ test('Extract passive income video', async t => {
   const subtitles = await getSubtitles({ videoID: 'JueUvj6X3DA' });
   t.deepEqual('creating passive income takes work but', subtitles[0].text);
 });
+
+test('Try capturing subtitles not listed in captionTracks', async t => {
+  const subtitles = await getSubtitles({ videoID: '62xdACKITrE' });
+  t.deepEqual(subtitles[0], {
+    start: '11.8',
+    dur: '2.9',
+    text:
+      'Ein Flugzeug liegt im Abendwind\nA plane is flying on the evening winds',
+  });
+});
