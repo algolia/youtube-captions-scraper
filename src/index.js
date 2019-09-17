@@ -6,6 +6,32 @@ import { find } from 'lodash';
 import striptags from 'striptags';
 import parser from 'xml2json'
 
+const renameTextProp = ({$t, ...caption}) => ({...caption, text: $t})
+
+async function alternativeCaptionsRetrieval(videoID, lang) {
+  const availableCaptions = await axios.get(`http://video.google.com/timedtext?v=${videoID}&type=list`)
+  const availableCaptionsParsed = parser.toJson(availableCaptions.data, {object: true})
+  let availableLanguages = []
+  try {
+    availableCaptionsParsed.transcript_list.track.forEach(track => availableLanguages.push(track.lang_code))
+  } catch (error) {
+    throw new Error(`Could not find captions for video: ${videoID}`);
+  }
+  if (!availableLanguages.includes(lang)) {
+    throw new Error(`Could not find ${lang} captions. Avaliable languages: ${availableLanguages.join(', ')}.`);
+  }
+  const captionsForLang = await axios.get(`http://video.google.com/timedtext?v=${videoID}&lang=${lang}`)
+  const captionsForLangParsed = parser.toJson(captionsForLang.data, {object: true})
+  let result = []
+  try {
+    result = captionsForLangParsed.transcript.text.map(renameTextProp)
+  } catch (error) {
+    throw new Error(`Could not find captions for video: ${videoID}`);
+  }
+  return result
+}
+
+
 export async function getSubtitles({
   videoID,
   lang = 'en',
@@ -19,28 +45,10 @@ export async function getSubtitles({
 
   const decodedData = decodeURIComponent(data);
 
-  // * ensure we have access to captions data
+
   if (!decodedData.includes('captionTracks')) {
-    const availableCaptions = await axios.get(`http://video.google.com/timedtext?v=${videoID}&type=list`)
-    const availableCaptionsParsed = parser.toJson(availableCaptions.data, {object: true})
-    let availableLanguages = []
-    try {
-      availableCaptionsParsed.transcript_list.track.forEach(track => availableLanguages.push(track.lang_code))
-    } catch (error) {
-      throw new Error(`Could not find captions for video: ${videoID}`);
-    }
-    if (!availableLanguages.includes(lang)) {
-      throw new Error(`Could not find ${lang} captions. Avaliable languages: ${availableLanguages.join(', ')}.`);
-    }
-    const captionsForLang = await axios.get(`http://video.google.com/timedtext?v=${videoID}&lang=${lang}`)
-    const captionsForLangParsed = parser.toJson(captionsForLang.data, {object: true})
-    let result = []
-    try {
-      result = captionsForLangParsed.transcript.text.map(({$t, ...caption}) => ({...caption, text: $t}))
-    } catch (error) {
-      throw new Error(`Could not find captions for video: ${videoID}`);
-    }
-    return result
+    const alternativeCaptions = await alternativeCaptionsRetrieval(videoID, lang)
+    return alternativeCaptions
   }
 
   const regex = /({"captionTracks":.*isTranslatable":(true|false)}])/;
@@ -61,32 +69,13 @@ export async function getSubtitles({
     throw new Error(`Could not find ${lang} captions for ${videoID}`);
 
   const { data: transcript } = await axios.get(subtitle.baseUrl);
-  const lines = transcript
-    .replace('<?xml version="1.0" encoding="utf-8" ?><transcript>', '')
-    .replace('</transcript>', '')
-    .split('</text>')
-    .filter(line => line && line.trim())
-    .map(line => {
-      const startRegex = /start="([\d.]+)"/;
-      const durRegex = /dur="([\d.]+)"/;
-
-      const [, start] = startRegex.exec(line);
-      const [, dur] = durRegex.exec(line);
-
-      const htmlText = line
-        .replace(/<text.+>/, '')
-        .replace(/&amp;/gi, '&')
-        .replace(/<\/?[^>]+(>|$)/g, '');
-
-      const decodedText = he.decode(htmlText);
-      const text = striptags(decodedText);
-
-      return {
-        start,
-        dur,
-        text,
-      };
-    });
+  const transcriptParsed = parser.toJson(transcript, {object: true})
+  let lines = []
+  try {
+    lines = transcriptParsed.transcript.text.map(renameTextProp)
+  } catch (error) {
+    throw new Error(`Could not find captions for ${videoID}`);
+  }
 
   return lines;
 }
