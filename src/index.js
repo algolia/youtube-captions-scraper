@@ -1,6 +1,5 @@
 /* @flow */
 
-import he from 'he';
 import axios from 'axios';
 import { find } from 'lodash';
 import striptags from 'striptags';
