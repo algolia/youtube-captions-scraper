@@ -1,5 +1,9 @@
 node_modules
 dist
+.vscode
 
 *.log
 .DS_Store
+
+# CLI output
+*.captions.json
