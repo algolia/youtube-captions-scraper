@@ -1,12 +1,19 @@
 {
   "name": "youtube-captions-scraper",
-  "version": "1.0.3",
-  "description": "Scrap youtube auto-generated captions",
+  "version": "2.0.0",
+  "description": "Scrape YouTube auto-generated captions",
   "main": "dist/index.js",
   "author": {
     "name": "Algolia, Inc.",
     "url": "https://www.algolia.com"
   },
+  "contributors": [
+    {
+      "name": "tom byrer",
+      "email": "tombyrer@gmail.com",
+      "url": "https://tombyrer.com"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/algolia/youtube-captions-scraper.git"
@@ -27,25 +34,23 @@
     "ava": "^0.25.0",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.0.2",
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-stage-0": "^6.24.1",
-    "babel-watch": "^2.0.7",
-    "eslint": "^4.11.0",
+    "babel-watch": "^2.0.8",
+    "eslint": "^4.19.1",
     "eslint-config-algolia": "^12.0.0",
-    "eslint-config-prettier": "^2.8.0",
-    "eslint-plugin-flowtype": "^2.39.1",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-prettier": "^2.3.1",
-    "flow-bin": "^0.59.0",
-    "flow-typed": "^2.2.3",
-    "prettier": "^1.8.2"
+    "eslint-config-prettier": "^2.10.0",
+    "eslint-plugin-flowtype": "^2.50.3",
+    "eslint-plugin-import": "^2.15.0",
+    "eslint-plugin-prettier": "^2.7.0",
+    "flow-bin": "^0.91.0",
+    "flow-typed": "^2.5.1",
+    "prettier": "^1.16.1"
   },
   "dependencies": {
-    "axios": "^0.17.1",
-    "he": "^1.1.1",
-    "lodash": "^4.17.4",
-    "striptags": "^3.1.0"
+    "axios": "^0.19.2",
+    "he": "^1.2.0"
   },
   "ava": {
     "babel": "inherit",

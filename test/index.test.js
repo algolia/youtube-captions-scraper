@@ -10,7 +10,8 @@ test('Extract estonia war subtitles', async t => {
   });
 });
 
-test('Extract passive income video', async t => {
-  const subtitles = await getSubtitles({ videoID: 'JueUvj6X3DA' });
-  t.deepEqual('creating passive income takes work but', subtitles[0].text);
+test('Simple HTML stays, but <font> is removed', async t => {
+  const subtitles = await getSubtitles({ videoID: '9W0Dy1nM-zU' });
+  t.deepEqual('<b>Bold </b><i>Italic </i><u>Underline</u>', subtitles[3].text);
+  t.deepEqual('Red (a = 40)', subtitles[4].text);
 });
