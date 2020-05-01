@@ -1,6 +1,6 @@
 # Youtube Captions scraper
 
-> Fetch youtube user submitted or fallback to auto-generated captions
+> Fetch youtube captions or fallback to auto-generated captions
 
 ## Installation
 

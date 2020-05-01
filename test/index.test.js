@@ -14,3 +14,8 @@ test('Extract passive income video', async t => {
   const subtitles = await getSubtitles({ videoID: 'JueUvj6X3DA' });
   t.deepEqual('creating passive income takes work but', subtitles[0].text);
 });
+
+test('Extract small talk video', async t => {
+  const subtitles = await getSubtitles({ videoID: 'YqunQaPQumk' });
+  t.deepEqual('♪♪♪', subtitles[0].text);
+});
