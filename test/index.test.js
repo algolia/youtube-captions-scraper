@@ -4,13 +4,13 @@ import { getSubtitles } from '../src';
 test('Extract estonia war subtitles', async t => {
   const subtitles = await getSubtitles({ videoID: 'HBA0xDHZjko' });
   t.deepEqual(subtitles[0], {
-    dur: '5.87',
-    start: '6.62',
-    text: 'November 19',
+    dur: '5.679',
+    start: '7.12',
+    text: 'november 1918',
   });
 });
 
 test('Extract passive income video', async t => {
   const subtitles = await getSubtitles({ videoID: 'JueUvj6X3DA' });
-  t.deepEqual('creating passive income takes work but', subtitles[0].text);
+  t.deepEqual('- Creating passive income takes work,', subtitles[0].text);
 });
