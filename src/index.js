@@ -13,17 +13,15 @@ export async function getSubtitles({
   lang: 'en' | 'de' | 'fr' | void,
 }) {
   const { data } = await axios.get(
-    `https://youtube.com/get_video_info?video_id=${videoID}`
+    `https://youtube.com/watch?v=${videoID}`
   );
 
-  const decodedData = decodeURIComponent(data);
-
   // * ensure we have access to captions data
-  if (!decodedData.includes('captionTracks'))
+  if (!data.includes('captionTracks'))
     throw new Error(`Could not find captions for video: ${videoID}`);
 
   const regex = /({"captionTracks":.*isTranslatable":(true|false)}])/;
-  const [match] = regex.exec(decodedData);
+  const [match] = regex.exec(data);
   const { captionTracks } = JSON.parse(`${match}}`);
 
   const subtitle =
