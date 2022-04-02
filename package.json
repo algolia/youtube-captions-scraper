@@ -1,6 +1,6 @@
 {
   "name": "youtube-captions-scraper",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Scrape YouTube auto-generated captions",
   "main": "dist/index.js",
   "author": {
@@ -49,7 +49,7 @@
     "prettier": "^1.16.1"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.26.1",
     "he": "^1.2.0"
   },
   "ava": {

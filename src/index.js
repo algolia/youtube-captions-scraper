@@ -1,7 +1,7 @@
 /* @flow */
 
 import he from 'he';
-import axios from 'axios';  // includes JSON transforms & XSRF protection
+import axios from 'axios';
 
 export async function getSubtitles({
   videoID,
@@ -11,24 +11,24 @@ export async function getSubtitles({
   lang: 'en' | 'de' | 'fr' | void,
 }) {
   const { data } = await axios.get(
-    `https://youtube.com/get_video_info?video_id=${videoID}`
+    `https://youtube.com/watch?v=${videoID}`
   );
-  const decodedData = decodeURIComponent(data)
 
   // * ensure we have access to captions data
-  if (!decodedData.includes('captionTracks'))
-    throw new Error(`Could not find captions for video: ${videoID}`)
+  if (!data.includes('captionTracks'))
+    throw new Error(`Could not find captions for video: ${videoID}`);
 
-  const regex = /({"captionTracks":.*isTranslatable":(true|false)}])/
-  const [match] = regex.exec(decodedData)
-  const { captionTracks } = JSON.parse(`${match}}`)
+  const regex = /({"captionTracks":.*isTranslatable":(true|false)}])/;
+  const [match] = regex.exec(data);
+  const { captionTracks } = JSON.parse(`${match}}`);
+
   const subtitle = captionTracks.find( ({ vssId }) => vssId && vssId.match(`.${lang}`) )
 
   // * ensure we have found the correct subtitle lang
   if (!subtitle || (subtitle && !subtitle.baseUrl))
-    throw new Error(`Could not find ${lang} captions for ${videoID}`)
+    throw new Error(`Could not find ${lang} captions for ${videoID}`);
 
-  const { data: transcript } = await axios.get(subtitle.baseUrl)
+  const { data: transcript } = await axios.get(subtitle.baseUrl);
 
   let timedtext = []
   const startRegex = /start="([\d.]+)"/;
