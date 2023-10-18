@@ -20,10 +20,10 @@ export async function getSubtitles({
   if (!data.includes('captionTracks'))
     throw new Error(`Could not find captions for video: ${videoID}`);
 
-  const regex = /({"captionTracks":.*isTranslatable":(true|false)}])/;
+  const regex =  /"captionTracks":(\[.*?\])/;
   const [match] = regex.exec(data);
-  const { captionTracks } = JSON.parse(`${match}}`);
 
+  const { captionTracks } = JSON.parse(`{${match}}`);
   const subtitle =
     find(captionTracks, {
       vssId: `.${lang}`,
