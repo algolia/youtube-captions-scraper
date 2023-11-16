@@ -1,3 +1,7 @@
+# v2.0.2
+
+Add support for browser extensions via conditionally using fetch over axios
+
 # v2.0.1
 
 Fixed Invalid attempt to destructure non-iterable instance error

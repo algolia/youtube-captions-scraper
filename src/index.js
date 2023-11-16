@@ -5,6 +5,30 @@ import axios from 'axios';
 import { find } from 'lodash';
 import striptags from 'striptags';
 
+function isRunningInExtension() {
+  // * extension API check
+  if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id) {
+    return true;
+  }
+  if (typeof browser !== 'undefined' && browser.runtime && browser.runtime.id) {
+    return true;
+  }
+
+  // ? Safari, Firefox checks might go here
+
+  return false;
+}
+
+async function fetchData(url) {
+  if (isRunningInExtension()) {
+    const response = await fetch(url);
+    return await response.text();
+  } else {
+    const { data } = await axios.get(url);
+    return data;
+  }
+}
+
 export async function getSubtitles({
   videoID,
   lang = 'en',
@@ -12,7 +36,7 @@ export async function getSubtitles({
   videoID: string,
   lang: 'en' | 'de' | 'fr' | void,
 }) {
-  const { data } = await axios.get(
+  const data = await fetchData(
     `https://youtube.com/watch?v=${videoID}`
   );
 
