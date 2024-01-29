@@ -5,6 +5,17 @@ import axios from 'axios';
 import { find } from 'lodash';
 import striptags from 'striptags';
 
+const fetchData =
+  typeof fetch === 'function'
+    ? async function fetchData(url) {
+        const response = await fetch(url);
+        return await response.text();
+      }
+    : async function fetchData(url) {
+        const { data } = await axios.get(url);
+        return data;
+      };
+
 export async function getSubtitles({
   videoID,
   lang = 'en',
@@ -12,7 +23,7 @@ export async function getSubtitles({
   videoID: string,
   lang: 'en' | 'de' | 'fr' | void,
 }) {
-  const { data } = await axios.get(
+  const data = await fetchData(
     `https://youtube.com/watch?v=${videoID}`
   );
 
@@ -37,7 +48,7 @@ export async function getSubtitles({
   if (!subtitle || (subtitle && !subtitle.baseUrl))
     throw new Error(`Could not find ${lang} captions for ${videoID}`);
 
-  const { data: transcript } = await axios.get(subtitle.baseUrl);
+  const transcript = await fetchData(subtitle.baseUrl);
   const lines = transcript
     .replace('<?xml version="1.0" encoding="utf-8" ?><transcript>', '')
     .replace('</transcript>', '')
